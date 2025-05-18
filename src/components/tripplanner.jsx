@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Calender from "../assets/calender.png";
 import { Notes } from "./notes";
+import { DeleteIcon, CheckIcon, PendingIcon } from "./icons";
 import "./tripplanner.css";
 
 export function TripPlanner() {
   const navigate = useNavigate();
   const [tripDetails, setTripDetails] = useState(null);
   const [notes, setNotes] = useState([]);
+  const [editingNoteId, setEditingNoteId] = useState(null);
+  const [editingNoteTitle, setEditingNoteTitle] = useState("");
+  const [editingSubNotes, setEditingSubNotes] = useState([]);
   const [countdown, setCountdown] = useState({
     days: 0,
     hours: 0,
@@ -119,19 +123,38 @@ export function TripPlanner() {
     setShowNotesPopup(true);
   };
   const handleNotesSubmit = (noteData) => {
-    try {
-      const newNote = {
-        id: Date.now(),
-        title: noteData.title || "Untitled",
-        subNotes: Array.isArray(noteData.subNotes) ? noteData.subNotes : [],
-      };
+    const newNote = {
+      id: Date.now(),
+      title: noteData.title || "Untitled",
+      subNotes: noteData.subNotes.map((note) => ({
+        ...note,
+        completed: false,
+      })),
+    };
+    setNotes((prev) => [...prev, newNote]);
+    setShowNotesPopup(false);
+  };
 
-      setNotes((prev) => [...prev, newNote]);
-      setShowNotesPopup(false);
-    } catch (error) {
-      console.error("Error adding new note:", error);
-      alert("Failed to add note. Please try again.");
-    }
+  const handleToggleTaskStatus = (noteId, subNoteId) => {
+    setNotes((prev) =>
+      prev.map((note) => {
+        if (note.id === noteId) {
+          return {
+            ...note,
+            subNotes: note.subNotes.map((subNote) => {
+              if (subNote.id === subNoteId) {
+                return {
+                  ...subNote,
+                  completed: !subNote.completed,
+                };
+              }
+              return subNote;
+            }),
+          };
+        }
+        return note;
+      })
+    );
   };
 
   const handleDeleteNote = (noteId) => {
@@ -154,6 +177,66 @@ export function TripPlanner() {
     );
   };
 
+  const handleEditNote = (noteId) => {
+    const note = notes.find((n) => n.id === noteId);
+    if (note) {
+      setEditingNoteId(noteId);
+      setEditingNoteTitle(note.title);
+      setEditingSubNotes([...note.subNotes]);
+    }
+  };
+
+  const handleSaveNote = (noteId) => {
+    setNotes((prev) =>
+      prev.map((note) => {
+        if (note.id === noteId) {
+          return {
+            ...note,
+            title: editingNoteTitle,
+            subNotes: editingSubNotes.map((subNote) => ({
+              ...subNote,
+              completed: subNote.completed || false,
+            })),
+          };
+        }
+        return note;
+      })
+    );
+    setEditingNoteId(null);
+    setEditingNoteTitle("");
+    setEditingSubNotes([]);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingNoteId(null);
+    setEditingNoteTitle("");
+    setEditingSubNotes([]);
+  };
+
+  const handleEditSubNote = (subNoteId, newText) => {
+    setEditingSubNotes((prev) =>
+      prev.map((subNote) => {
+        if (subNote.id === subNoteId) {
+          return { ...subNote, text: newText };
+        }
+        return subNote;
+      })
+    );
+  };
+
+  const handleAddSubNote = () => {
+    if (editingNoteId) {
+      setEditingSubNotes((prev) => [
+        ...prev,
+        {
+          id: Date.now() + Math.random(),
+          text: "",
+          completed: false,
+        },
+      ]);
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
@@ -163,12 +246,126 @@ export function TripPlanner() {
       year: "numeric",
     });
   };
-  const DeleteIcon = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
+
+  const renderNoteContent = (note, index) => {
+    return editingNoteId === note.id ? (
+      <div className="editing-note">
+        <input
+          type="text"
+          className="edit-title-input"
+          value={editingNoteTitle}
+          onChange={(e) => setEditingNoteTitle(e.target.value)}
+          placeholder="Enter note title"
+        />
+        <p className="note-date">
+          {(() => {
+            if (!tripDetails?.departureDate) return "";
+            const date = new Date(tripDetails.departureDate);
+            date.setDate(date.getDate() + index);
+            return (
+              formatDate(date.toISOString()) +
+              ", " +
+              date.toLocaleDateString("en-US", { weekday: "long" })
+            );
+          })()}
+        </p>
+
+        <div className="note-items">
+          {editingSubNotes.map((subNote, subIndex) => (
+            <div
+              key={subNote.id}
+              className={`note-item ${subNote.completed ? "completed" : ""}`}
+            >
+              <span className="note-number">{subIndex + 1}.</span>
+              <input
+                type="text"
+                className="edit-subnote-input"
+                value={subNote.text}
+                onChange={(e) => handleEditSubNote(subNote.id, e.target.value)}
+                placeholder="Enter note text"
+              />
+              <button
+                className="delete-subnote-btn"
+                onClick={() => {
+                  setEditingSubNotes((prev) =>
+                    prev.filter((n) => n.id !== subNote.id)
+                  );
+                }}
+              >
+                <DeleteIcon />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="note-actions">
+          <button className="add-subnote-btn" onClick={handleAddSubNote}>
+            + Add Note
+          </button>
+          <div className="edit-actions">
+            <button
+              className="save-btn"
+              onClick={() => handleSaveNote(note.id)}
+            >
+              Save
+            </button>
+            <button className="cancel-btn" onClick={handleCancelEdit}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <>
+        <div className="note-header">
+          <h4 className="note-card-title">{note.title}</h4>
+          <button
+            className="edit-note-btn"
+            onClick={() => handleEditNote(note.id)}
+          >
+            ✎
+          </button>
+        </div>
+        <p className="note-date">
+          {(() => {
+            if (!tripDetails?.departureDate) return "";
+            const date = new Date(tripDetails.departureDate);
+            date.setDate(date.getDate() + index);
+            return (
+              formatDate(date.toISOString()) +
+              ", " +
+              date.toLocaleDateString("en-US", { weekday: "long" })
+            );
+          })()}
+        </p>
+        <div className="note-items">
+          {note.subNotes.map((subNote, subIndex) => (
+            <div
+              key={subNote.id}
+              className={`note-item ${subNote.completed ? "completed" : ""}`}
+            >
+              <div
+                className={`task-status-btn ${
+                  subNote.completed ? "completed" : "pending"
+                }`}
+                onClick={() => handleToggleTaskStatus(note.id, subNote.id)}
+              >
+                {subNote.completed ? <CheckIcon /> : <PendingIcon />}
+              </div>
+              <span className="note-number">{subIndex + 1}.</span>
+              <p className="note-text">{subNote.text}</p>
+              <button
+                className="delete-subnote-btn"
+                onClick={() => handleDeleteSubNote(note.id, subNote.id)}
+              >
+                <DeleteIcon />
+              </button>
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  };
 
   return (
     <>
@@ -224,37 +421,15 @@ export function TripPlanner() {
                   <div className="note-day">
                     <h3>Day {index + 1}</h3>
                   </div>
-                  <button className="delete-note-btn" onClick={() => handleDeleteNote(note.id)}>
+                  <button
+                    className="delete-note-btn"
+                    onClick={() => handleDeleteNote(note.id)}
+                  >
                     <DeleteIcon />
                   </button>
                 </div>
-
                 <div className="note-card-content">
-                  <h4 className="note-card-title">{note.title}</h4>
-                  <p className="note-date">
-                    {(() => {
-                      if (!tripDetails?.departureDate) return "";
-                      const date = new Date(tripDetails.departureDate);
-                      date.setDate(date.getDate() + index);
-                      return (
-                        formatDate(date.toISOString()) +
-                        ", " +
-                        date.toLocaleDateString("en-US", { weekday: "long" })
-                      );
-                    })()}
-                  </p>
-
-                  <div className="note-items">
-                    {note.subNotes.map((subNote, subIndex) => (
-                      <div key={subNote.id} className="note-item">
-                        <span className="note-number">{subIndex + 1}.</span>
-                        <p className="note-text">{subNote.text}</p>
-                        <button className="delete-subnote-btn" onClick={() => handleDeleteSubNote(note.id, subNote.id)}>
-                          <DeleteIcon />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  {renderNoteContent(note, index)}
                 </div>
               </div>
             ))}

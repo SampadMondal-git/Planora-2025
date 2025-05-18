@@ -9,6 +9,11 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.notes-popup-overlay.closing {
+  animation: fadeOut 0.3s ease forwards;
 }
 
 .notes-popup-container {
@@ -31,19 +36,21 @@
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  background: rgba(28, 28, 28, 0.95);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  box-shadow: 0 8px 32px rgba(255, 215, 0, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(50px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.08);
   height: auto;
   width: clamp(300px, 35%, 600px);
   padding: 3rem;
-  border-radius: 20px;
+  border-radius: 25px;
   transform: scale(0.95);
   animation: scaleIn 0.3s ease forwards;
 }
 
-
+.notes-container.closing {
+  animation: scaleOut 0.3s ease forwards;
+}
 
 .notes-header {
   width: 100%;
@@ -91,23 +98,23 @@
 }
 
 .notes-title-input {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 215, 0, 0.2);
-    border-radius: 12px;
-    color: white;
-    transition: all 0.3s ease;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 15px;
+  color: white;
+  transition: all 0.3s ease;
 }
 
 .notes-title-input input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 1.2rem;
-    outline: none;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  outline: none;
 }
 
 .notes-input {
@@ -116,7 +123,7 @@
   font-size: 1rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 215, 0, 0.2);
-  border-radius: 12px;
+  border-radius: 15px;
   color: white;
   transition: all 0.3s ease;
   resize: vertical;
@@ -127,25 +134,25 @@
 }
 
 .notes-input h1 {
-    font-size: 1.2rem;
-    color: #ffd700;
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-    position: relative;
-    padding-left: 1.5rem;
+  font-size: 1.2rem;
+  color: #ffd700;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  position: relative;
+  padding-left: 1.5rem;
 }
 
 .notes-input h1::before {
-    content: "•";
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    left: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ffd700;
-    font-size: 1.4rem;
-    line-height: 1;
+  content: "•";
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffd700;
+  font-size: 1.4rem;
+  line-height: 1;
 }
 
 .notes-input:focus {
@@ -185,9 +192,6 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.notes-btn button {
   background: rgba(0, 255, 0, 0.1);
   border: 2px solid rgba(0, 255, 0, 0.3);
   color: #00ff00;
@@ -229,6 +233,15 @@
   }
 }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes scaleIn {
   from {
     transform: scale(0.95);
@@ -237,5 +250,16 @@
   to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
   }
 }
