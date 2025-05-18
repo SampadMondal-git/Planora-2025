@@ -1,12 +1,37 @@
-# React + Vite
+# Planora 🧠✨  
+**A Smarter Way to Plan and Track Your Life**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Planora is a sleek and intuitive productivity web app designed to help users organize, manage, and visualize their daily tasks, goals, and progress — all in one place. Originally built for the **CodeCircuit Hackathon 2025**, Planora is now evolving into a public project aimed at improving everyday planning with style and efficiency.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- ✅ **Task Planning** — Add, edit, delete and track your daily to-dos
+- 📆 **Smart Scheduler** — Organize your day with intelligent time-slot suggestions *(Upcoming)*
+- 📊 **Progress Tracker** — Visualize completed tasks vs pending ones
+- 🌙 **Dark Mode Support** — Enjoy planning day or night
+- ⚡ **Blazing Fast** — Built with Vite + React for smooth performance
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🖼️ Preview
+
+*(Add screenshots or a demo video here if available)*
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology     | Purpose                      |
+|----------------|------------------------------|
+| React          | Frontend UI Framework        |
+| Vite           | Lightning-fast build tool    |
+| Tailwind CSS   | Modern utility-first styling |
+| React Icons    | Iconography                  |
+| Git & GitHub   | Version control + hosting    |
+
+---
+
+## 📁 Folder Structure
+
