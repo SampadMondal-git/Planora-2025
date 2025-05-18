@@ -32,22 +32,6 @@ Try it out here: [https://planora-2025.vercel.app/](https://planora-2025.vercel.
 
 ---
 
-## 📁 Project Structure
-
-planora-app/
-├── public/ # Static assets and favicon
-├── src/
-│ ├── components/ # Reusable UI components (TaskItem, Header, etc.)
-│ ├── pages/ # Main page (App.jsx)
-│ ├── styles/ # Tailwind and custom styles
-│ ├── App.jsx # Root component
-│ └── main.jsx # Entry point for React app
-├── index.html # Main HTML template
-├── package.json # Project dependencies and scripts
-├── vite.config.js # Vite config file
-└── README.md # Project documentation
-
-
 ---
 
 ## 🧪 How to Run Locally
