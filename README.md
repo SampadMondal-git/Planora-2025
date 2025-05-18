@@ -1,12 +1,77 @@
-# React + Vite
+# Planora 🧠✨  
+**Your Minimalist Task Planner for Daily Productivity**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Planora is a sleek, easy-to-use web application designed to help you organize, track, and complete your daily tasks efficiently. Whether you want to manage personal chores or professional goals, Planora keeps you focused with a clean, distraction-free interface.
 
-Currently, two official plugins are available:
+Built using React, Vite, and Tailwind CSS, Planora is optimized for speed and responsiveness on both desktop and mobile devices.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- ✅ **Add, Edit, and Delete Tasks** — Quickly manage your to-do list  
+- ⚡ **Fast & Responsive** — Powered by React + Vite with mobile-friendly design  (Mobile-friendly version is currently under development.)
+- 💾 **Local Storage** — Your tasks are saved on your device without needing an account  
+
+---
+
+## 🖥️ Live Demo
+
+Try it out here: [https://planora-2025.vercel.app/](https://planora-2025.vercel.app/)
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology     | Purpose                      |
+|----------------|------------------------------|
+| React          | Frontend UI Framework        |
+| Vite           | Fast build tool and dev server|
+| Tailwind CSS   | Utility-first CSS styling    |
+| React Icons    | Icons and visual elements    |
+
+---
+
+
+## 📁 Project Structure
+
+```
+planora-app/
+├── public/ # Static assets and favicon
+├── src/
+│ ├── components/ # Reusable UI components (Welcome, Header, etc.)
+│ ├── pages/ # Main page (App.jsx)
+│ ├── styles/ # Tailwind and custom styles
+│ ├── App.jsx # Root component
+│ └── main.jsx # Entry point for React app
+├── index.html # Main HTML template
+├── package.json # Project dependencies and scripts
+├── vite.config.js # Vite config file
+└── README.md # Project documentation
+```
+---
+
+## 🧪 How to Run Locally
+
+1. Clone the repo:
+
+```bash
+git clone https://github.com/SampadMondal-git/planora-app.git
+cd planora-app
+
+npm install
+
+npm run dev
+```
+Open your browser at http://localhost:5173 to see the app.
+
+## 👨‍💻 Author  
+**Sampad Mondal**  
+Frontend Developer | Kolkata
+
+
+---
+
+You can **copy-paste** this as your `README.md` and it matches exactly what your current app does and what’s planned next.
+
+If you want, I can help you prepare screenshots or deploy instructions for Vercel too. Just say!
