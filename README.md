@@ -65,8 +65,8 @@ npm run dev
 ```
 Open your browser at http://localhost:5173 to see the app.
 
-👨‍💻 Author␣␣
-Sampad Mondal␣␣
+## 👨‍💻 Author  
+**Sampad Mondal**  
 Frontend Developer | Kolkata
 
 
