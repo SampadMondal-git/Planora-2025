@@ -10,7 +10,7 @@ Built using React, Vite, and Tailwind CSS, Planora is optimized for speed and re
 ## 🚀 Features
 
 - ✅ **Add, Edit, and Delete Tasks** — Quickly manage your to-do list  
-- ⚡ **Fast & Responsive** — Powered by React + Vite with mobile-friendly design  (Mobile-friendly version is currently under development.)
+- ⚡ **Fast & Responsive** — Powered by React + Vite with mobile-friendly design
 - 💾 **Local Storage** — Your tasks are saved on your device without needing an account  
 
 ---
