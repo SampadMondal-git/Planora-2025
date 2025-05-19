@@ -341,7 +341,6 @@
   }
 }
 
-
 @keyframes reviewFadeIn {
   from {
     opacity: 0;
@@ -350,5 +349,194 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .plans-container {
+    padding: 15px;
+    min-height: calc(100vh - 80px);
+  }
+
+  .card {
+    padding: 20px 15px;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+
+  .input,
+  .input[type="date"],
+  .input[type="time"] {
+    padding: 16px 20px;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .input:not([type="date"]):not([type="time"]) {
+    padding: 20px 24px;
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .button {
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  .review {
+    margin: 20px 0;
+    padding: 15px;
+  }
+
+  .review p {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+
+  .review p strong {
+    min-width: 80px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .plans-container {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 15px 10px;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+
+  .input-container {
+    margin-bottom: 8px;
+  }
+
+  .input,
+  .input[type="date"],
+  .input[type="time"] {
+    padding: 14px 18px;
+    font-size: 16px;
+  }
+
+  .input:not([type="date"]):not([type="time"]) {
+    padding: 18px 22px;
+    font-size: 18px;
+  }
+
+  .suggestions {
+    max-height: 200px;
+  }
+
+  .suggestion-item {
+    padding: 10px 12px;
+    font-size: 0.9em;
+  }
+
+  .button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .review p {
+    font-size: 0.85em;
+    padding: 8px 10px;
+  }
+
+  .review p strong {
+    min-width: 70px;
+  }
+
+  .review p:before {
+    font-size: 1em;
+    margin-right: 8px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .card {
+    padding: 12px 8px;
+  }
+
+  .input,
+  .input[type="date"],
+  .input[type="time"] {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+
+  .input:not([type="date"]):not([type="time"]) {
+    padding: 16px 20px;
+    font-size: 16px;
+  }
+
+  .review {
+    padding: 12px;
+  }
+
+  .review p {
+    font-size: 0.8em;
+    padding: 6px 8px;
+  }
+}
+
+@media screen and (max-height: 600px) and (orientation: landscape) {
+  .plans-container {
+    padding: 10px;
+    min-height: calc(100vh - 60px);
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 5px;
+  }
+
+  .subtitle {
+    margin-bottom: 10px;
+  }
+
+  .input-container {
+    margin-bottom: 6px;
+  }
+
+  .button-group {
+    margin-top: 10px;
+  }
+
+  .review {
+    margin: 15px 0;
   }
 }

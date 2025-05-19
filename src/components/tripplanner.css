@@ -137,11 +137,12 @@
 .trip-planner {
   height: calc(100vh - 320px);
   overflow-y: auto;
-  padding: 0 2rem 2rem;
+  padding: 0 2rem 6rem;
   width: 100%;
   margin-top: 1rem;
   -webkit-overflow-scrolling: touch;
   scrollbar-gutter: stable;
+  position: relative;
 }
 
 .note-content {
@@ -676,4 +677,119 @@
   width: 14px;
   height: 14px;
   transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 1200px) {
+  .notes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .timer-container {
+    width: calc(100% - 2rem);
+    margin: 1rem;
+    padding: 0 1rem;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .trip-container {
+    gap: 2rem;
+    flex-direction: row;
+  }
+
+  .timer-container {
+    height: auto;
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .note-card {
+    min-width: unset;
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+    padding: 0.5rem;
+  }
+
+  .planner-container {
+    padding: 0.5rem;
+  }
+
+  .trip-planner {
+    padding: 0 1rem 4rem;
+    height: calc(100vh - 434px);
+    min-height: 300px;
+    margin-bottom: 2rem;
+  }
+
+  .planner-note {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .note-content {
+    padding-left: 0;
+  }
+
+  .sub-notes {
+    padding-left: 0;
+  }
+
+  .note-card {
+    padding: 1rem;
+  }
+
+  .days, .hours, .minutes, .seconds {
+    font-size: 24px;
+  }
+
+  .location-container .location {
+    font-size: 20px;
+  }
+
+  .departure-container .date {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .planner-actions {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .add-day-btn, .delete-trip-btn {
+    width: 100%;
+  }
+
+  .note-header {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .note-item {
+    padding: 0.6rem;
+    padding-right: 2.5rem;
+  }
+
+  .delete-subnote-btn {
+    width: 22px;
+    height: 22px;
+    right: 0.5rem;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .save-btn, .cancel-btn, .add-subnote-btn {
+    width: 100%;
+  }
 }

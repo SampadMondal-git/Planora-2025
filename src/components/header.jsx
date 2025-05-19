@@ -1,10 +1,12 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./header.css";
 import Logo from "../assets/logo.web.png";
 
 export function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isInPlanner = location.pathname.endsWith("planner");
+  const isInAuth = location.pathname.includes("signin") || location.pathname.includes("signup");
 
   return (
     <div className="header-container">
@@ -13,10 +15,10 @@ export function Header() {
           <img src={Logo} width={100} alt="logo" />
         </Link>
       </div>
-      {!isInPlanner && (
+      {!isInPlanner && !isInAuth && (
         <div className="login-container">
-          <button className="signin-button">Sign In</button>
-          <button className="signup-button">Sign Up</button>
+          <button className="signin-button" onClick={() => navigate('/signin')}>Sign In</button>
+          <button className="signup-button" onClick={() => navigate('/signup')}>Sign Up</button>
         </div>
       )}
     </div>
