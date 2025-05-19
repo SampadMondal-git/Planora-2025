@@ -679,6 +679,82 @@
   transition: all 0.3s ease;
 }
 
+.edit-date-input {
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffd700;
+  font-size: 16px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.edit-date-input:hover {
+  border-color: rgba(255, 215, 0, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.edit-date-input:focus {
+  border-color: #ffd700;
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 25px rgba(255, 215, 0, 0.2);
+}
+
+.edit-date-input::-webkit-calendar-picker-indicator {
+  background: transparent;
+  padding: 8px;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  opacity: 0.7;
+  filter: invert(1);
+  transition: all 0.2s ease;
+}
+
+.edit-date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  filter: invert(83%) sepia(31%) saturate(638%) hue-rotate(358deg) brightness(103%) contrast(107%);
+}
+
+.edit-date-input::-webkit-datetime-edit {
+  padding: 0;
+  color: #ffd700;
+}
+
+.edit-date-input::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+  color: #ffd700;
+}
+
+.edit-date-input::-webkit-datetime-edit-text {
+  padding: 0 4px;
+  color: rgba(255, 215, 0, 0.7);
+}
+
+.edit-date-input::-webkit-datetime-edit-month-field,
+.edit-date-input::-webkit-datetime-edit-day-field,
+.edit-date-input::-webkit-datetime-edit-year-field {
+  padding: 0 4px;
+  color: #ffd700;
+}
+
+.edit-date-input::-webkit-datetime-edit-month-field:focus,
+.edit-date-input::-webkit-datetime-edit-day-field:focus,
+.edit-date-input::-webkit-datetime-edit-year-field:focus {
+  background-color: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  outline: none;
+}
+
 @media screen and (max-width: 1200px) {
   .notes-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -791,5 +867,10 @@
 
   .save-btn, .cancel-btn, .add-subnote-btn {
     width: 100%;
+  }
+
+  .edit-date-input {
+    padding: 14px 18px;
+    font-size: 14px;
   }
 }

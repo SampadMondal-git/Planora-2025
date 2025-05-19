@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import Calender from "../assets/calender.png";
 import { Notes } from "./notes";
@@ -11,6 +11,7 @@ export function TripPlanner() {
   const [notes, setNotes] = useState([]);
   const [editingNoteId, setEditingNoteId] = useState(null);
   const [editingNoteTitle, setEditingNoteTitle] = useState("");
+  const [editingNoteDate, setEditingNoteDate] = useState("");
   const [editingSubNotes, setEditingSubNotes] = useState([]);
   const [countdown, setCountdown] = useState({
     days: 0,
@@ -60,35 +61,35 @@ export function TripPlanner() {
     }
   }, [navigate]);
 
-  useEffect(() => {
+  const calculateCountdown = useCallback(() => {
     if (!tripDetails) return;
 
-    const calculateCountdown = () => {
-      const now = new Date().getTime();
-      const tripDate = new Date(
-        `${tripDetails.departureDate} ${tripDetails.departureTime}`
-      ).getTime();
-      const difference = tripDate - now;
+    const now = new Date().getTime();
+    const tripDate = new Date(
+      `${tripDetails.departureDate} ${tripDetails.departureTime}`
+    ).getTime();
+    const difference = tripDate - now;
 
-      if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const minutes = Math.floor(
-          (difference % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    if (difference > 0) {
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor(
+        (difference % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        setCountdown({ days, hours, minutes, seconds });
-      }
-    };
+      setCountdown({ days, hours, minutes, seconds });
+    }
+  }, [tripDetails]);
 
+  useEffect(() => {
     calculateCountdown();
     const timer = setInterval(calculateCountdown, 1000);
-
     return () => clearInterval(timer);
-  }, [tripDetails]);
+  }, [calculateCountdown]);
+
   useEffect(() => {
     try {
       if (notes && notes.length > 0) {
@@ -101,7 +102,7 @@ export function TripPlanner() {
     }
   }, [notes]);
 
-  const handleDeleteTrip = () => {
+  const handleDeleteTrip = useCallback(() => {
     if (
       window.confirm(
         "Are you sure you want to delete this trip? This action cannot be undone."
@@ -117,12 +118,13 @@ export function TripPlanner() {
         console.error("Error deleting trip data:", error);
       }
     }
-  };
+  }, [navigate]);
 
-  const handleAddNote = () => {
+  const handleAddNote = useCallback(() => {
     setShowNotesPopup(true);
-  };
-  const handleNotesSubmit = (noteData) => {
+  }, []);
+
+  const handleNotesSubmit = useCallback((noteData) => {
     const newNote = {
       id: Date.now(),
       title: noteData.title || "Untitled",
@@ -133,9 +135,9 @@ export function TripPlanner() {
     };
     setNotes((prev) => [...prev, newNote]);
     setShowNotesPopup(false);
-  };
+  }, []);
 
-  const handleToggleTaskStatus = (noteId, subNoteId) => {
+  const handleToggleTaskStatus = useCallback((noteId, subNoteId) => {
     setNotes((prev) =>
       prev.map((note) => {
         if (note.id === noteId) {
@@ -155,13 +157,13 @@ export function TripPlanner() {
         return note;
       })
     );
-  };
+  }, []);
 
-  const handleDeleteNote = (noteId) => {
+  const handleDeleteNote = useCallback((noteId) => {
     setNotes((prev) => prev.filter((note) => note.id !== noteId));
-  };
+  }, []);
 
-  const handleDeleteSubNote = (noteId, subNoteId) => {
+  const handleDeleteSubNote = useCallback((noteId, subNoteId) => {
     setNotes((prev) =>
       prev.map((note) => {
         if (note.id === noteId) {
@@ -175,45 +177,73 @@ export function TripPlanner() {
         return note;
       })
     );
-  };
-
-  const handleEditNote = (noteId) => {
+  }, []);
+  const handleEditNote = useCallback((noteId) => {
     const note = notes.find((n) => n.id === noteId);
     if (note) {
       setEditingNoteId(noteId);
       setEditingNoteTitle(note.title);
       setEditingSubNotes([...note.subNotes]);
+      // Use the note's custom date if it exists, otherwise use the original calculated date
+      if (note.customDate) {
+        setEditingNoteDate(note.customDate);
+      } else {
+        const index = notes.findIndex((n) => n.id === noteId);
+        const date = new Date(tripDetails.departureDate);
+        date.setDate(date.getDate() + index);
+        setEditingNoteDate(date.toISOString().split('T')[0]);
+      }
     }
-  };
+  }, [notes, tripDetails]);
 
-  const handleSaveNote = (noteId) => {
-    setNotes((prev) =>
-      prev.map((note) => {
-        if (note.id === noteId) {
-          return {
-            ...note,
-            title: editingNoteTitle,
-            subNotes: editingSubNotes.map((subNote) => ({
-              ...subNote,
-              completed: subNote.completed || false,
-            })),
-          };
-        }
-        return note;
-      })
-    );
+  const handleSaveNote = useCallback((noteId) => {
+    setNotes((prev) => {
+      const index = prev.findIndex(note => note.id === noteId);
+      if (index === -1) return prev;
+
+      const editingDate = new Date(editingNoteDate);
+      const tripStartDate = new Date(tripDetails.departureDate);
+      const daysDiff = Math.floor((editingDate - tripStartDate) / (1000 * 60 * 60 * 24));
+
+      const editedNote = {
+        ...prev[index],
+        title: editingNoteTitle,
+        subNotes: editingSubNotes.map((subNote) => ({
+          ...subNote,
+          completed: subNote.completed || false,
+        })),
+        customDate: editingNoteDate,
+      };
+
+      const newNotes = prev.filter(note => note.id !== noteId);
+      const targetIndex = newNotes.findIndex(note => {
+        const noteDate = new Date(note.customDate || tripDetails.departureDate);
+        return noteDate > editingDate;
+      });
+
+      if (targetIndex === -1) {
+        newNotes.push(editedNote);
+      } else {
+        newNotes.splice(targetIndex, 0, editedNote);
+      }
+
+      return newNotes;
+    });
+    
     setEditingNoteId(null);
     setEditingNoteTitle("");
+    setEditingNoteDate("");
     setEditingSubNotes([]);
-  };
+  }, [editingNoteTitle, editingSubNotes, editingNoteDate, tripDetails]);
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     setEditingNoteId(null);
     setEditingNoteTitle("");
+    setEditingNoteDate("");
     setEditingSubNotes([]);
-  };
+  }, []);
 
-  const handleEditSubNote = (subNoteId, newText) => {
+  const handleEditSubNote = useCallback((subNoteId, newText) => {
     setEditingSubNotes((prev) =>
       prev.map((subNote) => {
         if (subNote.id === subNoteId) {
@@ -222,9 +252,9 @@ export function TripPlanner() {
         return subNote;
       })
     );
-  };
+  }, []);
 
-  const handleAddSubNote = () => {
+  const handleAddSubNote = useCallback(() => {
     if (editingNoteId) {
       setEditingSubNotes((prev) => [
         ...prev,
@@ -235,9 +265,9 @@ export function TripPlanner() {
         },
       ]);
     }
-  };
+  }, [editingNoteId]);
 
-  const formatDate = (dateString) => {
+  const formatDate = useCallback((dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -245,7 +275,7 @@ export function TripPlanner() {
       month: "short",
       year: "numeric",
     });
-  };
+  }, []);
 
   const renderNoteContent = (note, index) => {
     return editingNoteId === note.id ? (
@@ -257,19 +287,13 @@ export function TripPlanner() {
           onChange={(e) => setEditingNoteTitle(e.target.value)}
           placeholder="Enter note title"
         />
-        <p className="note-date">
-          {(() => {
-            if (!tripDetails?.departureDate) return "";
-            const date = new Date(tripDetails.departureDate);
-            date.setDate(date.getDate() + index);
-            return (
-              formatDate(date.toISOString()) +
-              ", " +
-              date.toLocaleDateString("en-US", { weekday: "long" })
-            );
-          })()}
-        </p>
-
+        <input
+          type="date"
+          className="edit-date-input"
+          value={editingNoteDate}
+          onChange={(e) => setEditingNoteDate(e.target.value)}
+          min={tripDetails.departureDate}
+        />
         <div className="note-items">
           {editingSubNotes.map((subNote, subIndex) => (
             <div
@@ -325,14 +349,12 @@ export function TripPlanner() {
           >
             ✎
           </button>
-        </div>
-        <p className="note-date">
+        </div>        <p className="note-date">
           {(() => {
             if (!tripDetails?.departureDate) return "";
-            const date = new Date(tripDetails.departureDate);
-            date.setDate(date.getDate() + index);
+            const date = new Date(note.customDate || tripDetails.departureDate);
             return (
-              formatDate(date.toISOString()) +
+              formatDate(date) +
               ", " +
               date.toLocaleDateString("en-US", { weekday: "long" })
             );
@@ -417,9 +439,14 @@ export function TripPlanner() {
           <div className="notes-grid">
             {notes.map((note, index) => (
               <div className="note-card" key={note.id}>
-                <div className="note-card-header">
-                  <div className="note-day">
-                    <h3>Day {index + 1}</h3>
+                <div className="note-card-header">                  <div className="note-day">
+                    <h3>Day {(() => {
+                      const noteDate = new Date(note.customDate || tripDetails.departureDate);
+                      const startDate = new Date(tripDetails.departureDate);
+                      const diffTime = noteDate - startDate;
+                      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                      return diffDays + 1;
+                    })()}</h3>
                   </div>
                   <button
                     className="delete-note-btn"

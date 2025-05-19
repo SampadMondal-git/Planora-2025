@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./destination.css";
@@ -13,41 +13,44 @@ export function Destination() {
   const navigate = useNavigate();
   const API_KEY = import.meta.env.VITE_API_KEY;
 
-  useEffect(() => {
+  const fetchLocationSuggestions = useCallback(async () => {
     if (isSelected || query.trim().length < 2) {
       setSuggestions([]);
       return;
     }
 
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          `https://api.locationiq.com/v1/autocomplete?key=${API_KEY}&q=${query}&limit=5`
-        );
-        setSuggestions(res.data);
-      } catch (error) {
-        console.error("LocationIQ error:", error);
-        setSuggestions([]);
-      }
-    };
+    try {
+      const res = await axios.get(
+        `https://api.locationiq.com/v1/autocomplete?key=${API_KEY}&q=${query}&limit=5`
+      );
+      setSuggestions(res.data);
+    } catch (error) {
+      console.error("LocationIQ error:", error);
+      setSuggestions([]);
+    }
+  }, [query, isSelected, API_KEY]);
 
-    const debounce = setTimeout(fetchData, 500);
+  useEffect(() => {
+    const debounce = setTimeout(fetchLocationSuggestions, 500);
     return () => clearTimeout(debounce);
-  }, [query, isSelected]);
+  }, [fetchLocationSuggestions]);
 
-  const handleSelect = (place) => {
-    setQuery(place.display_name);
-    setSuggestions([]);
-    setIsSelected(true);
+  const handleSelect = useCallback(
+    (place) => {
+      setQuery(place.display_name);
+      setSuggestions([]);
+      setIsSelected(true);
 
-    const locationData = {
-      name: place.display_name,
-    };
+      const locationData = {
+        name: place.display_name,
+      };
 
-    localStorage.setItem("selectedLocation", JSON.stringify(locationData));
-  };
+      localStorage.setItem("selectedLocation", JSON.stringify(locationData));
+    },
+    []
+  );
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     const tripDetails = {
       location: JSON.parse(localStorage.getItem("selectedLocation")),
       departureDate,
@@ -55,30 +58,16 @@ export function Destination() {
     };
     localStorage.setItem("tripDetails", JSON.stringify(tripDetails));
     navigate("/planner");
-  };
+  }, [departureDate, departureTime, navigate]);
 
-  const goToNextStep = () => {
-    if (step === 2) {
-      const today = new Date();
-      const selectedDate = new Date(departureDate);
-
-      today.setHours(0, 0, 0, 0);
-      selectedDate.setHours(0, 0, 0, 0);
-
-      if (selectedDate < today) {
-        alert("Departure date cannot be in the past.");
-        return;
-      }
-    }
-
+  const goToPreviousStep = useCallback(() => setStep((prev) => prev - 1), []);
+  const goToNextStep = useCallback(() => {
     if (step === 4) {
       handleConfirm();
     } else {
       setStep((prev) => prev + 1);
     }
-  };
-
-  const goToPreviousStep = () => setStep((prev) => prev - 1);
+  }, [step, departureDate, handleConfirm]);
 
   return (
     <div className="plans-container">
@@ -88,12 +77,25 @@ export function Destination() {
             <h1 className="title">Where to next?</h1>
             <p className="subtitle">Start typing to search your destination</p>
 
-            <input type="text" placeholder="e.g., Paris, Tokyo, Goa" className="input" value={query} onChange={(e) => { setQuery(e.target.value); setIsSelected(false)}}/>
+            <input
+              type="text"
+              placeholder="e.g., Paris, Tokyo, Goa"
+              className="input"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setIsSelected(false);
+              }}
+            />
 
             {suggestions.length > 0 && !isSelected && (
               <ul className="suggestions">
                 {suggestions.map((place, idx) => (
-                  <li key={idx} className="suggestion-item" onClick={() => handleSelect(place)}>
+                  <li
+                    key={idx}
+                    className="suggestion-item"
+                    onClick={() => handleSelect(place)}
+                  >
                     {place.display_name}
                   </li>
                 ))}
@@ -102,7 +104,9 @@ export function Destination() {
 
             <button
               className={`button ${!isSelected ? "disabled" : "primary"}`}
-              onClick={goToNextStep} disabled={!isSelected}>
+              onClick={goToNextStep}
+              disabled={!isSelected}
+            >
               Next
             </button>
           </>
@@ -111,17 +115,22 @@ export function Destination() {
         {step === 2 && (
           <>
             <h1 className="title">When are you leaving?</h1>
-            <p className="subtitle">Pick your departure date</p>
-
-            <input type="date" className="input" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)}
-              min={new Date().toISOString().split("T")[0]}/>
+            <p className="subtitle">Pick your departure date</p>            <input
+              type="date"
+              className="input"
+              value={departureDate}
+              onChange={(e) => setDepartureDate(e.target.value)}
+            />
 
             <div className="button-group">
               <button className="button secondary" onClick={goToPreviousStep}>
                 Back
               </button>
-              <button className={`button ${!departureDate ? "disabled" : "primary"}`}
-                onClick={goToNextStep} disabled={!departureDate}>
+              <button
+                className={`button ${!departureDate ? "disabled" : "primary"}`}
+                onClick={goToNextStep}
+                disabled={!departureDate}
+              >
                 Next
               </button>
             </div>
@@ -132,15 +141,22 @@ export function Destination() {
           <>
             <h1 className="title">What time are you leaving?</h1>
             <p className="subtitle">Pick your departure time</p>
-            <input type="time" className="input" value={departureTime} onChange={(e) => setDepartureTime(e.target.value)}/>
+            <input
+              type="time"
+              className="input"
+              value={departureTime}
+              onChange={(e) => setDepartureTime(e.target.value)}
+            />
 
             <div className="button-group">
               <button className="button secondary" onClick={goToPreviousStep}>
                 Back
               </button>
-              <button className={`button ${!departureTime ? "disabled" : "primary"}`}
+              <button
+                className={`button ${!departureTime ? "disabled" : "primary"}`}
                 onClick={goToNextStep}
-                disabled={!departureTime}>
+                disabled={!departureTime}
+              >
                 Next
               </button>
             </div>
@@ -177,7 +193,7 @@ export function Destination() {
             </div>
 
             <div className="button-group">
-              <button  className="button secondary" onClick={goToPreviousStep}>
+              <button className="button secondary" onClick={goToPreviousStep}>
                 Back
               </button>
               <button className="button primary" onClick={handleConfirm}>
