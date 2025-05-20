@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import "./App.css";
 
 import { Header } from "./components/header.jsx";
@@ -12,7 +13,8 @@ export default function App() {
     <>
       <Router>
         <Header />
-        <div className="main-content">          <Routes>
+        <div className="main-content">
+          <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/enter-your-plans" element={<Destination />} />
             <Route path="/planner" element={<TripPlanner />} />
@@ -21,6 +23,8 @@ export default function App() {
           </Routes>
         </div>
       </Router>
+      
+      <Analytics />
     </>
   );
 }
