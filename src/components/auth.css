@@ -9,8 +9,8 @@
 
 .auth-card {
   width: 100%;
-  max-width: 600px;
-  padding: 3rem 4rem;
+  max-width: 700px;
+  padding: 2rem 3.5rem;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(15px);
   border-radius: 20px;
@@ -47,6 +47,7 @@
 
 .input-group input {
   width: 100%;
+  min-width: 340px;
   padding: 15px 20px;
   border-radius: 12px;
   border: 2px solid transparent;
