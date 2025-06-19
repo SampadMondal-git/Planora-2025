@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  animation: FadeInUp 0.8s ease-in-out forwards;
+  animation: FadeInUp 0.6s cubic-bezier(0.33, 1, 0.68, 1) forwards;
 }
 
 .auth-card {
@@ -16,7 +16,8 @@
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 30px rgba(255, 215, 0, 0.08);
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.5s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  will-change: transform, opacity;
 }
 
 .auth-card h1 {
@@ -47,7 +48,7 @@
 
 .input-group input {
   width: 100%;
-  min-width: 340px;
+  min-width: 300px;
   padding: 15px 20px;
   border-radius: 12px;
   border: 2px solid transparent;
@@ -120,12 +121,30 @@
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
+.auth-button, .auth-link {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 @keyframes fadeIn {
-  from {
+  0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: scale(0.95) translateY(20px);
   }
-  to {
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes FadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
