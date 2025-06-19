@@ -20,6 +20,10 @@
       "destination": "/robots.txt"
     },
     {
+      "source": "/google(.*)\\.html",
+      "destination": "/google$1.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/"
     }
