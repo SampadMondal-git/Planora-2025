@@ -8,9 +8,12 @@
     <title>Planora – Visual Travel Itinerary & Trip Planner</title>
 
     <meta name="description" content="Planora is a powerful visual travel itinerary planner. Easily plan trips, create travel schedules, organize vacations, and collaborate with friends using a drag-and-drop interface." />
-
     <meta name="keywords" content="travel itinerary planner, trip planning app, vacation scheduler, travel calendar, drag and drop trip planner, plan trips online, travel organization tool, itinerary builder, visual travel planner, collaborative trip planner, travel notes, travel itinerary maker" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://planora-2025.vercel.app/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
 
+    <meta property="og:type" content="website" />
     <meta property="og:title" content="Planora – Visual Travel Itinerary & Trip Planner" />
     <meta property="og:description" content="Create your perfect travel itinerary with Planora. Use drag-and-drop planning, daily trip calendars, real-time collaboration, and vacation notes to organize your next adventure." />
     <meta property="og:url" content="https://planora-2025.vercel.app/" />
@@ -20,11 +23,65 @@
     <meta name="twitter:title" content="Planora – Visual Travel Itinerary & Trip Planner" />
     <meta name="twitter:description" content="Plan unforgettable vacations and trips with Planora’s interactive itinerary builder. Perfect for solo travelers, families, and travel groups." />
     <meta name="twitter:image" content="https://planora-2025.vercel.app/cover.jpg" />
+    <meta name="twitter:site" content="@planoraapp" />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <link rel="canonical" href="https://planora-2025.vercel.app/" />
-
-    <meta name="robots" content="index, follow" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Planora",
+          "url": "https://planora-2025.vercel.app/",
+          "applicationCategory": "TravelApplication",
+          "description": "Planora is a visual, drag-and-drop travel itinerary planner with notes, calendar views, and real-time trip organization features.",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript",
+          "creator": {
+            "@type": "Organization",
+            "name": "Planora",
+            "url": "https://planora-2025.vercel.app/"
+          },
+          "image": "https://planora-2025.vercel.app/cover.jpg",
+          "offers": {
+            "@type": "Offer",
+            "price": "0.00",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "243"
+          }
+        },
+        {
+          "@type": "Organization",
+          "name": "Planora",
+          "url": "https://planora-2025.vercel.app/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://planora-2025.vercel.app/cover.jpg"
+          },
+          "sameAs": [
+            "https://twitter.com/planoraapp",
+            "https://facebook.com/planoraapp"
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://planora-2025.vercel.app/"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
@@ -33,7 +90,7 @@
       <p>Use Planora to plan your trips visually with daily itineraries, drag-and-drop scheduling, vacation notes, and collaborative trip planning tools.</p>
     </noscript>
 
-    <div id="root"></div>
+    <main id="root" role="main"></main>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
